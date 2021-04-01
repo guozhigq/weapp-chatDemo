@@ -1,9 +1,5 @@
 //index.js
 //获取应用实例
-// var url = 'wss://test.nwx000.com/wss';
-// const wxapi = require('../../../utils/wxapi')
-// const vail = require('../../../utils/vail')
-// const util = require('../../../utils/util')
 var recorder = wx.getRecorderManager();
 const innerAudioContext = wx.createInnerAudioContext() //获取播放对象
 const app = getApp();
@@ -391,6 +387,7 @@ Page({
     const fromid = this.data.fromid
     let obj = {fromid: fromid, content: [...this.parseEmoji(comment)]}
     const talkData2 = this.data.talkData2
+    console.log(talkData2)
     talkData2.unshift(obj)
     this.setData({
       talkData2,
@@ -621,22 +618,6 @@ Page({
     // that.setData({
     //   scrollIntoView: `page${page}`
     // })
-
-    
-  },
-  test(){
-    const that = this
-    that.setData({
-      loading: true
-    })
-    that.setData({
-      talkData: [...this.data.talkData,...this.data.talkData2]
-    })
-    setTimeout(()=>{
-      that.setData({
-        loading: false
-      },1000)
-    })
   },
   // 自定义下拉刷新被复位
   restorePull(){
@@ -694,8 +675,9 @@ Page({
   },
   // 图片比例缩放
   setPicSize(content) {
-    let maxW = 400;//350是定义消息图片最大宽度
-    let maxH = 400;//350是定义消息图片最大高度
+    console.log(content)
+    let maxW = 700;//350是定义消息图片最大宽度
+    let maxH = 700;//350是定义消息图片最大高度
     if (content.width > maxW || content.height > maxH) {
       let scale = content.width / content.height;
       content.width = scale > 1 ? maxW : maxH * scale;
@@ -703,16 +685,35 @@ Page({
     }
     return content;
   },
-  // 上传图片
+  // 上传图片至服务器
   uploadPic: function (tempFilePath) {
-    const that = this;
-   
+    const that = this
+    let img = {};
+    const fromid = that.data.fromid;
+    wx.getImageInfo({
+      src: tempFilePath,
+      success(res) {
+        that.setPicSize(res)
+        img = {
+          width: res.width,
+          height: res.height,
+          url: tempFilePath
+        }
+
+        let obj = {fromid: fromid, content: [{type:3,img:img}]}
+        const talkData2 = that.data.talkData2
+        talkData2.unshift(obj)
+        that.setData({
+          talkData2,
+        })
+      }
+    })
+    return
     wx.uploadFile({
       url: url,
       filePath: tempFilePath,
       name: 'file',
       success(res) {
-        
         const data = JSON.parse(res.data)
         if (data.state === 2000) {
           // that.setData({
@@ -721,18 +722,11 @@ Page({
           wx.getImageInfo({
             src: tempFilePath,
             success(res) {
-              // that.setData({ // 实际图片尺寸
-              //   'sendImg.wdith': res.width,
-              //   'sendImg.height': res.height,
-              // })
-              // let img = that.setPicSize(res)
-              // 展示的图片信息
               that.setData({
                 'imgUrl.width': res.width,
                 'imgUrl.height': res.height,
                 'imgUrl.url': data.data,
               })
-              // console.log(that.data.imgUrl);
               that.sendPic(res.width, res.height); // 发送图片
             }
           })
@@ -741,7 +735,8 @@ Page({
     })
   },
   // 相册选取图片
-  choosePic: function () {
+  choosePic: function (e) {
+    let type = e.currentTarget.dataset.type
     const that = this;
     wx.chooseImage({
       count: 1,
@@ -749,25 +744,14 @@ Page({
       sourceType: ['album', 'camera'],
       success(res) {
         var tempFilePaths = res.tempFilePaths
+        console.log(tempFilePaths)
+        // 上传图片至服务端
         that.uploadPic(tempFilePaths[0]);
       },
       fail(res) { }
     })
   },
-  // 照相机获取
-  chooseCream: function () {
-    const that = this;
-    wx.chooseImage({
-      count: 1,
-      sizeType: ['original', 'compressed'],
-      sourceType: ['camera'],
-      success(res) {
-        var tempFilePaths = res.tempFilePaths
-        that.uploadPic(tempFilePaths[0]);
-      },
-      fail(res) { }
-    })
-  },
+
   // 图片查看
   imgTouch: function (res) {
     const url = res.currentTarget.dataset.text.url
@@ -894,7 +878,6 @@ Page({
       success: function (res) {
         const model = res.model;
         const mobileModel = model.indexOf('iPhone X');
-        // console.log(model, mobileModel);
         if (mobileModel == 0) {
           that.setData({
             safeheight: 68
@@ -912,8 +895,7 @@ Page({
       })
     }).exec();
     query.selectAll('.menu').boundingClientRect(function (rect) {
-      console.log(rect)
-      if(rect.length >0){
+      if(rect.length > 0){
         that.setData({
           menuHeight: rect[0].height
         })
@@ -926,7 +908,7 @@ Page({
   },
   //页面隐藏
   onHide: function () {
-      wx.closeSocket();
+
   },
   onPullDownRefresh: function () {
     // this.getTalkData();

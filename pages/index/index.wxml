@@ -46,46 +46,13 @@
                     style="background-image: url({{emojiSource}});transform-origin: 0 0; transform: scale({{lineHeight / 64}});"></view>
                 </view>
               </block>
+              <block wx:if="{{it.type == 3}}">
+                <image src="{{it.img.url}}" style="width: {{it.img.width}}rpx;height: {{it.img.height}}rpx" mode="aspectFit"></image>
+              </block>
             </block>
           </view>
-          
-          <!-- <block wx:if="{{item.type == 'text' && item.content}}">
-            <view class="textBox {{item.fromid  == fromid ? 'text-green' : 'text-default'}}">
-              <text class="fsize-28">{{item.content}}</text>
-            </view>
-          </block> -->
         </view>
       </block>
-      <!-- <block wx:for="{{talkData2}}" wx:key='index'>
-        <view class="flex-wrap flex-center">
-          <block wx:for="{{item.content}}" wx:for-item="it">
-            <block wx:if="{{it.type == 1}}">
-              {{it.content}}
-            </block>
-            <block wx:if="{{it.type == 2}}">
-              <view style="display: inline-block; width: {{lineHeight}}px; height: {{lineHeight}}px">
-                <view 
-                  class="{{it.imageClass}}"
-                  style="background-image: url({{emojiSource}});transform-origin: 0 0; transform: scale({{lineHeight / 64}});"></view>
-              </view>
-            </block>
-          </block>
-        </view>
-        
-        <view class="msg-item {{ item.fromid  == fromid ? 'msg-item-reverse' : '' }}" id="{{item.id}}">
-          <block wx:if="{{item.fromid == fromid}}">
-            <image class="adverse-head" src="{{from_head}}"></image>
-          </block>
-          <block wx:else>
-            <image class="adverse-head" src="{{to_head || '/img/my/avatar.png'}}"></image>
-          </block>
-          <block wx:if="{{item.type == 'text' && item.content}}">
-            <view class="textBox {{item.fromid  == fromid ? 'text-green' : 'text-default'}}">
-              <text class="fsize-28">{{item.content}}</text>
-            </view>
-          </block>
-        </view>
-      </block> -->
     </view>
     <view style="height: {{toolViewHeight}}px"></view>
   </scroll-view>
@@ -152,7 +119,7 @@
           indicator-active-color="#8c8c8c">
           <swiper-item class="swiper-item flex-wrap">
             <block wx:for="{{menuList}}">
-              <view class="flex-wrap flex-column flex-center item" >
+              <view class="flex-wrap flex-column flex-center item" bindtap="choosePic" data-type="{{item.type}}">
                 <view class="flex-wrap flex-center flex-c-center tool-view">
                   <image class="img" src="{{item.icon}}"></image>
                 </view>
