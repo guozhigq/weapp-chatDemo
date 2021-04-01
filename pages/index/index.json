@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "mp-emoji": "../../components/emoji/index"
+  },
+  "navigationBarTitleText": "聊天示例"
+}

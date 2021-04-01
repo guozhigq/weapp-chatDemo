@@ -1,0 +1,101 @@
+/**app.wxss**/
+.fcolor-white{
+  color: #fff;
+}
+text.fcolor-black, view.fcolor-black{
+  color: #000;
+}
+text.fcolor-333, view.fcolor-333, .fcolor-333{
+  color:#333;
+}
+text.fcolor-black3, view.fcolor-black3, .fcolor-black3{
+  color: #3B3B3B;
+}
+text.fcolor-666, view.fcolor-666, .fcolor-666{
+  color:#666;
+}
+/* font */
+text.fsize-16, view.fsize-16{
+  font-size: 16rpx;
+}
+text.fsize-18, view.fsize-18{
+  font-size: 18rpx;
+  line-height: 25rpx;
+}
+text.fsize-20, view.fsize-20,.fsize-20{
+  font-size: 20rpx;
+  line-height: 24rpx;
+}
+text.fsize-22, view.fsize-22{
+  font-size: 22rpx;
+  line-height: 30rpx;
+}
+text.fsize-24, view.fsize-24,.fsize-24{
+  font-size: 24rpx;
+  line-height: 30rpx;
+}
+text.fsize-26, view.fsize-26, .fsize-26{
+  font-size: 26rpx;
+  line-height: 32rpx;
+}
+text.fsize-28, view.fsize-28, .fsize-28{
+  font-size: 28rpx;
+  line-height: 36rpx;
+}
+text.fsize-30, view.fsize-30{
+  font-size: 30rpx;
+  line-height: 36rpx;
+}
+text.fsize-32, view.fsize-32, .fsize-32{
+  font-size: 32rpx;
+  line-height: 45rpx;
+}
+text.fsize-34, view.fsize-34{
+  font-size: 34rpx;
+  line-height:48rpx;
+}
+.ml5{ margin-left:5rpx; }
+.ml10{ margin-left:10rpx; }
+.ml15{ margin-left:15rpx; }
+.ml20{ margin-left:20rpx; }
+.ml24{ margin-left:24rpx; }
+.ml30{ margin-left: 30rpx; }
+.ml40{ margin-left:40rpx; }
+.mr5{ margin-right:5rpx; }
+.mr10{ margin-right:10rpx; }
+.mr15{ margin-right:15rpx; }
+.mt5{ margin-top:5rpx; }
+.mr20{ margin-right:20rpx; }
+.mt10{ margin-top:10rpx; }
+.mt15{ margin-top:15rpx; }
+.mt20{ margin-top:20rpx; }
+.mt25{ margin-top:25rpx; }
+.mt30{ margin-top:30rpx; }
+.mt34{ margin-top:34rpx; }
+.mt40{ margin-top:40rpx; }
+.mt60{ margin-top:60rpx; }
+.mb20{ margin-bottom:20rpx; }
+.mb34{ margin-bottom:34rpx; }
+.mb5{ margin-bottom: 5rpx; }
+.mb10{ margin-bottom: 10rpx; }
+.mb30{ margin-bottom: 30rpx; }
+.mb40{ margin-bottom: 40rpx; }
+.mb60{ margin-bottom: 60rpx; }
+.pl40{ padding-left: 40rpx; }
+.pr40{ padding-right: 40rpx; }
+.pt5{ padding-top: 5rpx; }
+.pt10{ padding-top: 10rpx; }
+.pt15{ padding-top: 15rpx; }
+.pt20{ padding-top: 20rpx; }
+.pt18{ padding-top: 18rpx; }
+.pt25{ padding-top: 25rpx; }
+.pt30{ padding-top: 30rpx; }
+.pt40{ padding-top: 40rpx; }
+.pb10{ padding-bottom: 10rpx; }
+.pb15{ padding-bottom: 15rpx; }
+.pb20{ padding-bottom: 20rpx; }
+.pb30{ padding-bottom: 30rpx; }
+.pb40{ padding-bottom: 40rpx; }
+.view-hover{
+  background: #f0f0f0 !important; 
+}
