@@ -1,18 +1,9 @@
 <view>
-  <!-- 顶部操作栏  -->
-  <!-- <view class="menu">
-    <block wx:for="{{menuList}}">
-      <view class="menu-item">
-        <image style="width:50rpx;height:50rpx;margin-bottom:6rpx" src="{{item.icon}}"></image>
-        <view style="font-size:26rpx">{{item.text}}</view>
-      </view>
-    </block>
-  </view> -->
   <!-- 中间聊天滑动区域 -->
   <scroll-view 
     scroll-y="true" 
     class="scrollview"
-    scroll-with-animation="{{scrollAnimation}}"
+    scroll-with-animation="true"
     enable-back-to-top="true"
     scroll-anchoring="true"
     scroll-top="{{scrollTop}}"
@@ -24,7 +15,7 @@
     bindrefresherrefresh="refreshPull"
     bindrefresherrestore="restorePull"
     refresher-triggered="{{refreshStatus}}"
-    style="height: {{windowHeight-toolHeight-menuHeight}}px">
+    style="height: {{windowHeight-toolHeight-menuHeight-toolViewHeight}}px">
     <view class="msg-box">
       <block wx:for="{{talkData2}}" wx:key='index'>
         <view class="msg-item {{ item.fromid  == fromid ? 'msg-item-reverse' : '' }}" id="{{item.id}}">
@@ -54,7 +45,7 @@
         </view>
       </block>
     </view>
-    <view style="height: {{toolViewHeight}}px"></view>
+    <!-- <view style="height: {{toolViewHeight}}px"></view> -->
   </scroll-view>
   <!-- 底部输入框功能区 -->
   <view class="tools" style="height: {{keyboardHeight ? keyboardHeight+toolHeight*2/3 : emojiShow ? 300+toolHeight/2 : functionShow ? 200+toolHeight/2 : ''}}px">
@@ -93,14 +84,6 @@
           <view hidden="{{!isRcord}}" class="input record-view" hover-class="view-hover" catchtouchstart='onRecordStart' catchtouchend="onRecordEnd" >按住 说话</view>
         </view>
         <!-- 发送按钮 -->
-        <!-- <view class="tools_btn">
-          <button 
-            class='cu-btn bg-green shadow-blur' 
-            style="color: #fff"
-            form-type="submit" 
-            bindtap="sendMsg"
-          >发送</button>
-        </view> -->
         <view class="tools_icon" bindtap="">
             <image src="/img/emoji.png" style="width: 60rpx; height: 60rpx;margin-right:15rpx" bindtap="showEmoji"></image>
             <image src="/img/add.png" style="width: 52rpx; height: 52rpx;margin-right:10rpx" bindtap="showFunction"></image>

@@ -130,20 +130,6 @@ Page({
     keyboardHeight: '', // 键盘高度
     inputFocus: false, // 输入框自动对焦
     refreshStatus: true,
-    menuList: [
-      {
-        icon: '/img/phone.png',
-        text: '要电话'
-      },
-      {
-        icon: '/img/talk.png',
-        text: '不合适'
-      },
-      {
-        icon: '/img/phone.png',
-        text: '邀请面试'
-      },
-    ],
     menuHeight: 0,
     toolViewHeight: '',
     total_page: 5,
@@ -192,28 +178,6 @@ Page({
     this.setData({
       scrollTouch: scrollTouch
     })
-  },
-  // 表情
-  isShow: function () {
-    const that = this
-    let picShow = this.data.picShow 
-    if(!this.data.picShow){
-      this.setData({
-        picShow: true,
-        inputFocus: false
-      })
-      let query = wx.createSelectorQuery();
-      query.selectAll('.msg-box').boundingClientRect(function (rect) {
-        that.setData({
-          scrollTop: rect[0].height+ that.data.keyboardHeight
-        })
-      }).exec();
-    }else{
-      this.setData({
-        inputFocus: !this.data.inputFocus
-      })
-    }
-    
   },
   // 输入框监听
   InputBlur: function (e) {
@@ -270,6 +234,7 @@ Page({
       that.setData({
         scrollTop: rect[0].height + toolViewHeight
       })
+      console.log(that.data.scrollTop)
     }).exec();
   },
   // 输入文字
@@ -302,67 +267,9 @@ Page({
       })
     }).exec();
   },
-  //表单 formId
-  submit: function (e) {
-    const formId = e.detail.formId;
-    const openid = wx.getStorageSync('openid')
-   
-    this.setData({
-      formId: formId
-    })
-
-    const that = this;
-    const url = app.globalData.url + '/api/saveFormId';
-
-    wx.request({
-      url: url,
-      data: {
-        form_id: formId,
-        openid: openid
-      },
-      method: 'POST',
-      success(res) {
-        // that.setData({
-        //   chatData: res.data.data
-        // })
-      }
-    })
-  },
-  // 发送文字消息
-  sendMsg: function () {
-    const that = this;
-    const InputContent = this.data.InputContent;
-    if (!InputContent) {
-      wx.showToast({
-        title: '请输入内容 ...',
-        icon: 'none'
-      });
-    } else {
-      let msgObj = {};
-      msgObj.content = this.data.InputContent; // 输入框内容
-      msgObj.type = 'text'; // 消息类型       
-      msgObj.fromid = this.data.fromid // 是当前用户
-      msgObj.portrait = this.data.from_head // 当前用户头像
-      
-      // 本地数据填充
-      let talkData = this.data.talkData
-      talkData.push(msgObj)
-      this.setData({
-        talkData: talkData,
-        InputContent: ''
-      })
-      let query = wx.createSelectorQuery();
-      query.selectAll('.msg-box').boundingClientRect(function (rect) {
-        that.setData({
-          scrollTop: rect[0].height
-        })
-      }).exec();
-    }
-  },
   // input输入
   onInput(e) {
     const value = e.detail.value
-    console.log(value)
     this.data.comment = value
   },
   onConfirm() {
@@ -393,6 +300,7 @@ Page({
       talkData2,
       comment: '' // 发送成功，清空输入框
     })
+    this.pageUp()
   },
   deleteEmoji: function() {
     const pos = this.data.cursor
@@ -648,30 +556,6 @@ Page({
       talkData: arr,
       msg: msgObj
     })
-    let imgData = {
-      meaasge: '',
-      url: that.data.imgUrl.url,
-      width: width,
-      height: height,
-      to: '9878676', // 对方id
-      from: '123142', // 自己的id
-      type: 'img'
-    }
-    wx.sendSocketMessage({
-      data: JSON.stringify({
-        type: 'sendMsg',
-        data: imgData
-      }),
-      fail: res => {
-
-      },
-      success: res => {
-        that.setData({
-          picShow: false
-        })
-      }
-    })
-    // this.sendMessage();
   },
   // 图片比例缩放
   setPicSize(content) {
