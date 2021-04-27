@@ -8,10 +8,14 @@
 
 #### 预览图
 
-![表情选择](https://github.com/guozhigq/weapp-chatDemo/blob/main/img/preview/WechatIMG54.png)
+<img alt="表情选择" src="https://github.com/guozhigq/weapp-chatDemo/blob/main/img/preview/WechatIMG54.png"  style="zoom: 40%;" />
+<img alt="键盘聚焦效果" src="https://github.com/guozhigq/weapp-chatDemo/blob/main/img/preview/WechatIMG55.png"  style="zoom: 40%;" />
+<img alt="表情面板" src="https://github.com/guozhigq/weapp-chatDemo/blob/main/img/preview/WechatIMG56.png"  style="zoom: 40%;" />
+<img alt="图片、文件发送" src="https://github.com/guozhigq/weapp-chatDemo/blob/main/img/preview/WechatIMG57.png"  style="zoom: 40%;" />
+<!-- ![表情选择](https://github.com/guozhigq/weapp-chatDemo/blob/main/img/preview/WechatIMG54.png)
 ![键盘聚焦效果](https://github.com/guozhigq/weapp-chatDemo/blob/main/img/preview/WechatIMG55.png)
 ![表情面板](https://github.com/guozhigq/weapp-chatDemo/blob/main/img/preview/WechatIMG56.png)
-![图片、文件发送](https://github.com/guozhigq/weapp-chatDemo/blob/main/img/preview/WechatIMG57.png)
+![图片、文件发送](https://github.com/guozhigq/weapp-chatDemo/blob/main/img/preview/WechatIMG57.png) -->
 
 #### 已完成
 
