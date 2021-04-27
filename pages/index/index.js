@@ -121,7 +121,7 @@ Page({
     uploadPic_url: '', 
     img: '',
     fromid: 123, // 当前用户id
-    from_head: 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=757545797,2214471709&fm=11&gp=0.jpg',// 当前用户头像
+    from_head: 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3364379035,3672240386&fm=26&gp=0.jpg',// 当前用户头像
     toId: '', // 对方id
     to_head: 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2622933625,920552892&fm=26&gp=0.jpg', // 对方头像
     emojiArr: [],
@@ -145,6 +145,11 @@ Page({
         type: 'camera',
         icon: '/img/camera.png',
         text: '拍摄'
+      },
+      {
+        type: 'file',
+        icon: '/img/file.png',
+        text: '文件'
       }
     ],
     recording: false, // 录音按钮按下样式

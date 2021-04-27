@@ -6,6 +6,13 @@
 
 <br />
 
+#### 预览图
+
+![表情选择](https://github.com/guozhigq/weapp-chatDemo/blob/main/img/preview/WechatIMG54.png)
+![键盘聚焦效果](https://github.com/guozhigq/weapp-chatDemo/blob/main/img/preview/WechatIMG55.png)
+![表情面板](https://github.com/guozhigq/weapp-chatDemo/blob/main/img/preview/WechatIMG56.png)
+![图片、文件发送](https://github.com/guozhigq/weapp-chatDemo/blob/main/img/preview/WechatIMG57.png)
+
 #### 已完成
 
 - [x] 满足基本聊天的功能：文字、表情、图片
