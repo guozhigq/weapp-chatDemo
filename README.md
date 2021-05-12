@@ -6,6 +6,33 @@
 
 <br />
 
+#### 已完成
+
+- [x] 满足基本聊天的功能：文字、表情、图片
+- [x] 支持下拉加载上一页聊天内容
+- [x] 对新增消息的append增加动画效果（参考微信）
+- [x] 底部适配iphone X以上机型
+- [x] 对聊天图片等比压缩
+- [x] 聊天消息展示图片边框
+- [x] 聊天中增加发送语音、语音播放功能
+
+<br />
+
+#### 待完成
+
+- [ ] 增加发送微信文件功能
+- [ ] ios端底部高度动态变化时，input内容抖动的问题
+
+#### 优化
+
+- [x] 聊天消息中文字+表情错位的问题
+
+<br />
+
+### 欢迎提出意见及建议。如果帮到了你，欢迎 🌟
+
+<br />
+
 #### 预览图
 
 <img alt="表情选择" src="https://github.com/guozhigq/weapp-chatDemo/blob/main/img/preview/WechatIMG54.png"  style="zoom: 40%;" />
@@ -16,25 +43,3 @@
 ![键盘聚焦效果](https://github.com/guozhigq/weapp-chatDemo/blob/main/img/preview/WechatIMG55.png)
 ![表情面板](https://github.com/guozhigq/weapp-chatDemo/blob/main/img/preview/WechatIMG56.png)
 ![图片、文件发送](https://github.com/guozhigq/weapp-chatDemo/blob/main/img/preview/WechatIMG57.png) -->
-
-#### 已完成
-
-- [x] 满足基本聊天的功能：文字、表情、图片
-- [x] 支持下拉加载上一页聊天内容
-- [x] 对新增消息的append增加动画效果（参考微信）
-- [x] 底部适配iphone X以上机型
-- [x] 对聊天图片等比压缩
-
-<br />
-
-#### 待完成
-
-- [ ] 增加发送微信文件功能
-- [ ] 聊天消息展示图片背景问题
-- [ ] 聊天中增加发送语音、语音播放功能
-- [ ] ios端底部高度动态变化时，input内容抖动的问题
-
-
-<br />
-
-### 欢迎提出意见及建议。如果帮到了你，欢迎 🌟

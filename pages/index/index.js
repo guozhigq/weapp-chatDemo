@@ -97,7 +97,13 @@ Page({
         type: 'text', // 消息类型
         content: '15'
       }
-    ], // 聊天内容
+    ], 
+    // 聊天内容
+    // 1 文字
+    // 2 表情
+    // 3 图片
+    // 4 语音
+    // 5 文件
     talkData2: [
       {
         fromid: '321', // 发送人id
@@ -113,9 +119,16 @@ Page({
         type: 'text', // 消息类型
         content: '16',
         content: [
-          {type: 1, content: '今天天气怎么样？'},
-          {type: 2, content: "[流泪]", imageClass: "smiley_5"}
+          {type: 1, content: '今天天气怎么样？今天天气怎么样？今天天气怎么样？今天天气怎么样？'},
+          {type: 2, content: "[流泪]", imageClass: "smiley_5"},
+          {type: 1, content: '亲爱的啊啊啊，今天天气怎么样？'},
         ]
+      },
+      {
+        fromid: '123', // 发送人id
+        type: 'record', // 消息类型
+        record: '16',
+        timestemp: 5
       }
     ], // 聊天内容
     uploadPic_url: '', 
@@ -130,7 +143,6 @@ Page({
     keyboardHeight: '', // 键盘高度
     inputFocus: false, // 输入框自动对焦
     refreshStatus: true,
-    menuHeight: 0,
     toolViewHeight: '',
     total_page: 5,
     page: 0,
@@ -239,7 +251,6 @@ Page({
       that.setData({
         scrollTop: rect[0].height + toolViewHeight
       })
-      console.log(that.data.scrollTop)
     }).exec();
   },
   // 输入文字
@@ -297,9 +308,8 @@ Page({
   onsend() {
     const comment = this.data.comment
     const fromid = this.data.fromid
-    let obj = {fromid: fromid, content: [...this.parseEmoji(comment)]}
+    let obj = {fromid: fromid, type: 'text', content: [...this.parseEmoji(comment)]}
     const talkData2 = this.data.talkData2
-    console.log(talkData2)
     talkData2.unshift(obj)
     this.setData({
       talkData2,
@@ -307,6 +317,7 @@ Page({
     })
     this.pageUp()
   },
+  // 删除表情
   deleteEmoji: function() {
     const pos = this.data.cursor
     const comment = this.data.comment
@@ -345,7 +356,7 @@ Page({
     })
   },
 
-  
+
   // 消息触底
   msgBottom: function () {
     const that = this;
@@ -359,46 +370,26 @@ Page({
       })
     }).exec();
   },
-  // 消息未读
-  unRead(){
-    const that  = this
-    let fromid = that.data.fromid;
-    let toid = that.data.toId;
-    util.request({
-      modules: '',
-      method: 'post',
-      data: {
-          fromid: fromid,
-          toid: toid
+  // 连接socket
+  connect: function () {
+    // 创建一个websocket连接
+    return wx.connectSocket({
+      url: 'wss://abc.com/wss', 
+      header: {
+        'content-type': 'application/json'
       },
-      success: (result) => {
-        console.log(result)
+      method: 'GET',
+      success: res => {
+        console.log('websocket连接')
+      },
+      fail: res => {
+        console.log('websocket连接失败~')
       }
     })
   },
-  // 连接socket
-  connect: function () {
-    
-    // 创建一个websocket连接
-    // return wx.connectSocket({
-    //   url: 'wss://test.nwx000.com/wss',
-    //   header: {
-    //     'content-type': 'application/json'
-    //   },
-    //   method: 'GET',
-    //   success: res => {
-    //     console.log('websocket连接')
-    //   },
-    //   fail: res => {
-    //     console.log('websocket连接失败~')
-    //   }
-    // })
-  },
   onSocketMessage(){
     const that = this
-    
     wx.onSocketMessage(function (res) {
-    
       let fromid = that.data.fromid;
       let toid = that.data.toId;
       let chatData = JSON.parse(res.data);
@@ -406,85 +397,24 @@ Page({
       //接收服务端传过来的消息
       let type = chatData.type
       switch (type) {
-            case "init":
 
-              wx.sendSocketMessage({
-                  data: JSON.stringify({
-                    type: 'bind',
-                    fromid: fromid, // 自己的id
-                })
-              });
-              
-              let online = '{"type":online,"toid":"'+toid+'","fromid":"'+fromid+'"}';   //查看当前用户是否在线
-              wx.sendSocketMessage(JSON.stringify(online));
-              that.unRead()
-              // changeNoRead();
-              break;
-            case "text":        //处理文字消息
-              
-              // if (toid == chatData.fromid) {
-              //   console.log(chatData.data)
-                
-              // }
-              console.log(type)
-              let receiveMsg = {};
-              let msg = unescape(chatData.data)
-              console.log(msg)
-              // receiveMsg.content = chatData.data; // 输入框内容
-              receiveMsg.content = msg; // 输入框内容
+        // 初始化
+        case "init":
 
-              receiveMsg.type = chatData.type; // 消息类型       
-              receiveMsg.fromid = chatData.fromid; // 对方
-              let avatar = '/img/my/avatar.png'
-              receiveMsg.portrait = avatar // 头像
-              let talkData = that.data.talkData
-              if(chatData.fromid == that.data.toId){
-                talkData.push(receiveMsg)
-                that.setData({
-                  talkData: talkData
-                })
-              }
-              let query = wx.createSelectorQuery();
-              query.selectAll('.msg-box').boundingClientRect(function (rect) {
-                console.log(rect)
-                that.setData({
-                  scrollTop: rect[0].height
-                })
-              }).exec();
-              // $(".chat-content").scrollTop(3000);   将对话框定到最下面
-              // changeNoRead();
-              break;
-            case "say_img":     //处理图片消息
-              //处理图片放在对话框
-            
-            case "save":        //聊天记录持久化
-              // that.saveMessage(chatData)   //聊天记录
-              if (chatData.isread == 1) {
-                online = 1;
-                // $(".shop-online").text("在线");
-              } else {
-                // $(".shop-online").text("不在线");
-              }
+        break;
 
-            case "online":     //用户是否在线
-              if(chatData.status == 1){
-                  // online=1;
-                  // $(".shop-online").text("在线");
-              } else{
-                  // online=0;
-                  // $(".shop-online").text("不在线");
-              }
+        // 处理文字消息
+        case "text": 
+          
+        break;
+
+        // 处理图片信息 
+        case "say_img": 
+          
+        break;
+
+        // ... ...
       }
-    })
-  },
- 
-  getSystemInfo(){
-    wx.getSystemInfo({
-      success: (result) => {
-        this.setData({
-          windowHeight: result.windowHeight
-        })
-      },
     })
   },
   
@@ -504,10 +434,6 @@ Page({
     //     })
     //   }).exec();
   },
-
-  /*
-  * sceoll-view滑动事件
-  */
 
   // 自定义下拉刷新空间被下拉
   startPull(){
@@ -537,42 +463,39 @@ Page({
     console.log('自定义下拉刷新被复位')
   },
 
-  /*
-  *  发送附件 照片
-  */
- 
-  // 发送图片信息
-  sendPic: function (width, height) {
-    const that = this;
-    let imgUrl = that.data.imgUrl;
-    let msgObj = {};
-    msgObj.url = imgUrl.url; // 图片/照片
-    msgObj.width = imgUrl.width; // 图片/照片
-    msgObj.height = imgUrl.height; // 图片/照片
-    msgObj.isMine = true; // 是否是我 
-    msgObj.type = 'img'; // 消息类型
-    msgObj.portrait = that.data.mineAvatar ?
-      that.data.mineAvatar :
-      app.globalData.userInfo.avatarUrl // 头像
-    let arr = [];
-    let talkData = that.data.talkData;
-    arr = [msgObj, ...talkData] // 对象拼接
-    that.setData({
-      talkData: arr,
-      msg: msgObj
-    })
-  },
-  // 图片比例缩放
-  setPicSize(content) {
-    console.log(content)
-    let maxW = 700;//350是定义消息图片最大宽度
-    let maxH = 700;//350是定义消息图片最大高度
-    if (content.width > maxW || content.height > maxH) {
-      let scale = content.width / content.height;
-      content.width = scale > 1 ? maxW : maxH * scale;
-      content.height = scale > 1 ? maxW / scale : maxH;
+  // 菜单栏事件
+  menuFun(e) {
+    let type = e.currentTarget.dataset.type;
+    switch (type){
+      case 'photo':
+        this.choosePic();
+        console.log('选择上传照片')
+       break;
+      case 'carame':
+        this.choosePic();
+        console.log('选择上传照片')
+        break;
+      case 'file':
+        this.chooseMessageFile();
+        console.log('选择上传文件')
+        break;
     }
-    return content;
+    
+  },
+  // 相册选取图片
+  choosePic: function () {
+    const that = this;
+    wx.chooseImage({
+      count: 1,
+      sizeType: ['original', 'compressed'],
+      sourceType: ['album', 'camera'],
+      success(res) {
+        var tempFilePaths = res.tempFilePaths
+        // 上传图片至服务端
+        that.uploadPic(tempFilePaths[0]);
+      },
+      fail(res) { }
+    })
   },
   // 上传图片至服务器
   uploadPic: function (tempFilePath) {
@@ -582,96 +505,67 @@ Page({
     wx.getImageInfo({
       src: tempFilePath,
       success(res) {
-        that.setPicSize(res)
+        res = that.setPicSize(res)
         img = {
           width: res.width,
           height: res.height,
           url: tempFilePath
         }
 
-        let obj = {fromid: fromid, content: [{type:3,img:img}]}
+        let obj = {fromid: fromid, type: 'image', image: img, content: [{ img:img}]}
         const talkData2 = that.data.talkData2
         talkData2.unshift(obj)
+        console.log(talkData2)
         that.setData({
           talkData2,
         })
       }
     })
-    return
-    wx.uploadFile({
-      url: url,
-      filePath: tempFilePath,
-      name: 'file',
-      success(res) {
-        const data = JSON.parse(res.data)
-        if (data.state === 2000) {
-          // that.setData({
-          //   imgUrl: data.data,
-          // })
-          wx.getImageInfo({
-            src: tempFilePath,
-            success(res) {
-              that.setData({
-                'imgUrl.width': res.width,
-                'imgUrl.height': res.height,
-                'imgUrl.url': data.data,
-              })
-              that.sendPic(res.width, res.height); // 发送图片
-            }
-          })
-        }
-      }
-    })
   },
-  // 相册选取图片
-  choosePic: function (e) {
-    let type = e.currentTarget.dataset.type
-    const that = this;
-    wx.chooseImage({
-      count: 1,
-      sizeType: ['original', 'compressed'],
-      sourceType: ['album', 'camera'],
-      success(res) {
-        var tempFilePaths = res.tempFilePaths
-        console.log(tempFilePaths)
-        // 上传图片至服务端
-        that.uploadPic(tempFilePaths[0]);
-      },
-      fail(res) { }
-    })
-  },
-
-  // 图片查看
-  imgTouch: function (res) {
-    const url = res.currentTarget.dataset.text.url
-    var current_url = 'http://106.12.121.189:6004/' + url
-    var urls = []
-    var list = this.data.talkData
-    for (var index in list) {
-      if (list[index].type == 'img') {
-        urls.push('http://106.12.121.189:6004/' + list[index].url)
-      }
+  // 图片比例缩放
+  setPicSize(content) {
+    let maxW = 700; //350是定义消息图片最大宽度
+    let maxH = 700; //350是定义消息图片最大高度
+    if (content.width > maxW || content.height > maxH) {
+      let scale = content.width / content.height;
+      content.width = scale > 1 ? maxW : maxH * scale;
+      content.height = scale > 1 ? maxW / scale : maxH;
     }
-    urls = urls.reverse();
-    wx.previewImage({
-      current: current_url,
-      urls: urls
-    })
+    return content;
+  },
+  // 选择文件
+  chooseMessageFile: function (e) {
+    var that = this;
+    wx.chooseMessageFile({
+      count: 1,
+      type: 'file',
+      success(res) {
+        let filename = res.tempFiles[0].name; // 选择文件的名称
+        let filePath = res.tempFiles[0].path; // 选择文件的临时路径
+        // 上传到后端服务器
+        wx.uploadFile({
+          url: "xxx",
+          filePath: filePath,
+          name: 'xxx',
+          success(result) {
+            // json字符串 需用 JSON.parse 转
+            let res = JSON.parse(result.data);
+
+          }
+        })
+ 
+ 
+ 
+      }
+    });
   },
   // 开始录音
   onRecordStart(){
-    console.log('手指点击录音')
-    wx.showToast({
-      title: '开始录音',
-      icon: 'none'
-    })
-    
     this.setData({
       recording: true,
-      recordStart_temp: new Date().getTime(), //记录开始点击的时间
     })
     const options = {
-      duration: 10000, //指定录音的时长，单位 ms
+      duration: 30000, //指定录音的时长，单位 ms
       sampleRate: 8000, //采样率
       numberOfChannels: 1, //录音通道数
       encodeBitRate: 24000, //编码码率
@@ -684,60 +578,38 @@ Page({
   // 监听录音事件
   listenRecord(){
     console.log('录音监听事件');
+    let x = 0;
     recorder.onStart((res) => {
-      console.log('开始录音');
+      wx.showToast({
+        title: `正在录音...`,
+        icon: 'none',
+        duration: 99999999
+      })
+      this.setData({
+        vioceStart: new Date().getTime()
+      })
     })
     recorder.onStop((res) => {
       let {
         tempFilePath
       } = res;
-      console.log('停止录音,临时路径', tempFilePath);
-      var x = new Date().getTime() - this.data.voice_ing_start_date
+      
+      x = new Date().getTime() - this.data.vioceStart
       if (x > 1000) {
-        let timestamp = new Date().getTime();
-        console.log(tempFilePath)
-        // wx.cloud.uploadFile({
-        //   cloudPath: "sounds/" + timestamp + '.mp3',
-        //   filePath: tempFilePath,
-        //   success: res => {
-        //     console.log('上传成功', res)
-        //     that.setData({
-        //       soundUrl: res.fileID,
-        //     })
- 
-        //     var data = {
-        //       _qunId: 'fb16f7905e4bfa24009098dc34b910c8',
-        //       _openId: wx.getStorageSync('openId'),
-        //       // 消息
-        //       text: '',
-        //       voice: res.fileID,
-        //       img: '',
-        //       // 时间
-        //       dataTime: util.nowTime(),
-        //       // 头像
-        //       sendOutHand: wx.getStorageSync('userInfo').avatarUrl,
-        //       // 昵称
-        //       sendOutname: wx.getStorageSync('userInfo').nickName
-        //     }
-        //     console.log(data)
-        //     wx.cloud.callFunction({
-        //       name: "news",
-        //       data: data,
-        //       success(res) {
-        //         console.log('发送语音发送', res)
-        //       },
-        //       fail(res) {
-        //         console.log('发送语音失败', res)
-        //       }
-        //     })
-        //   },
-        // })
+        console.log('停止录音,临时路径', tempFilePath);
+        // 提交语音至后台服务器，并添加到聊天数据中
+        this.addRecord(x,tempFilePath)
+      }else{
+        wx.showToast({
+          title: '时间过短',
+          icon: 'none'
+        })
       }
     })
   },
   // 结束录音
   onRecordEnd(){
-    var x = new Date().getTime() - this.data.voice_ing_start_date
+    var x = new Date().getTime() - this.data.vioceStart
     if (x < 1000) {
       console.log('录音停止，说话小于1秒！')
       wx.showModal({
@@ -747,59 +619,85 @@ Page({
       recorder.stop();
     } else {
       // 录音停止，开始上传
+      wx.hideToast({
+        success: (res) => {},
+      })
       recorder.stop();
       this.setData({
         recording: false
       })
     }
   },
-  /*
-  *  小程序生命周期
-  */
-
-  onLoad: function (options) {
+  // 添加录音至聊天数据
+  addRecord(x,tempFilePath) {
+    x = (x/1000).toFixed(0)
     const that = this;
-    const emojiInstance = this.selectComponent('.mp-emoji')
-    this.emojiNames = emojiInstance.getEmojiNames()
-    this.parseEmoji = emojiInstance.parseEmoji
-    // 获取手机系统信息
-    wx.getSystemInfo({
-      success: function (res) {
-        const model = res.model;
-        const mobileModel = model.indexOf('iPhone X');
-        if (mobileModel == 0) {
+    const fromid = that.data.fromid;
+    let obj = {fromid: fromid, type: 'record', record: tempFilePath, timestemp: x, content: [{ type:4, record: tempFilePath, timestemp:x}]}
+    const talkData2 = that.data.talkData2
+    talkData2.unshift(obj)
+    console.log(talkData2)
+    that.setData({
+      talkData2,
+    })
+  },
+  // 播放录音
+  playVoice(e){
+    const that = this
+    let voice = e.currentTarget.dataset.voice;
+    let index = e.currentTarget.dataset.index;
+    let timestemp = that.data.talkData2[index].timestemp*1000;
+    
+    wx.playVoice({
+      filePath: voice,
+      success (res) { 
+        that.setData({
+          [`talkData2[${index}].playStatus`]: true
+        })
+        console.log(that.data.talkData2)
+        setTimeout(()=>{
           that.setData({
-            safeheight: 68
+            [`talkData2[${index}].playStatus`]: false
           })
-        }
+        },timestemp)
+      },
+      fail (err) {
+        console.log(err)
       }
     })
   },
-  onShow: function (options) {
+  /*
+  *  小程序生命周期
+  */
+  onLoad: function (options) {
+  
+    const emojiInstance = this.selectComponent('.mp-emoji')
+    this.emojiNames = emojiInstance.getEmojiNames()
+    this.parseEmoji = emojiInstance.parseEmoji
+    
+  },
+  onShow: function () {
+
+  },
+  onReady: function () {
     const that = this;
     let query = wx.createSelectorQuery();
+    // 获取底部输入栏的高度
     query.selectAll('.tools').boundingClientRect(function (rect) {
+      console.log(rect[0].height)
       that.setData({
         toolHeight: rect[0].height
       })
     }).exec();
-    query.selectAll('.menu').boundingClientRect(function (rect) {
-      if(rect.length > 0){
+
+    // 获取手机系统信息
+    wx.getSystemInfo({
+      success: function (res) {
         that.setData({
-          menuHeight: rect[0].height
+          windowHeight: res.windowHeight
         })
       }
-    }).exec();
-    this.getSystemInfo()
-  },
-  onReady: function () {
+    })
     this.listenRecord()
   },
-  //页面隐藏
-  onHide: function () {
-
-  },
-  onPullDownRefresh: function () {
-    // this.getTalkData();
-  }
 });
