@@ -14,7 +14,8 @@ Page({
     close_flag: 5000,
     scrollTop: '50',
     scrollAnimation: true, // scorll-view 滑动动画，设置为false为防止首次进入页面滑动
-    emojiSource: 'https://res.wx.qq.com/wxdoc/dist/assets/img/emoji-sprite.b5bd1fe0.png',
+    // emojiSource: 'https://res.wx.qq.com/wxdoc/dist/assets/img/emoji-sprite.b5bd1fe0.png',
+    emojiSource: 'https://github.com/guozhigq/weapp-chatDemo/blob/main/img/emoji-al.png',
     lineHeight: 24,
     comment: '',
     cursor: 0,
